@@ -33,10 +33,10 @@ TArray<float>* NoiseClass::GenerateNoiseMap(int mapSize, float scale)
 			float heightSampleX = x / scale;
 			float heightSampleY = y / scale;
 
-			float perlinValue = FMath::PerlinNoise2D(FVector2D(heightSampleX, heightSampleY)) * 10000.0f;
+			float perlinValue = FMath::PerlinNoise2D(FVector2D(heightSampleX, heightSampleY));
 
 			//perlinValue *= 10.0f;
-			(*noiseMap)[vertIndex] = perlinValue;
+			(*noiseMap)[vertIndex] = perlinValue * scale;
 			vertIndex++;
 		}
 	}
