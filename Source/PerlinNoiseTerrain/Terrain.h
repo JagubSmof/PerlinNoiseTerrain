@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "ProceduralMeshComponent.h"
-#include "NoiseClass.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Terrain.generated.h"
@@ -26,14 +24,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void CreateMesh();
+	MeshData* GenerateTerrainMesh(TArray<int> heightMap);
 
-	UProceduralMeshComponent* mesh;
-	NoiseClass* noise;
+	class UProceduralMeshComponent* mesh;
+	class MeshData* meshData;
 
 	UPROPERTY(EditAnywhere)
-		int mapWidth;
-	UPROPERTY(EditAnywhere)
-		int mapHeight;
+		// Size of the map. Map will always be square
+		int mapSize;
 	UPROPERTY(EditAnywhere)
 		float mapScale;
 };

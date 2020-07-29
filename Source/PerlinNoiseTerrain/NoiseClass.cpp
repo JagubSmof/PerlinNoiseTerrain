@@ -11,7 +11,7 @@ NoiseClass::~NoiseClass()
 {
 }
 
-TArray<int> GenerateNoiseMap(int width, int height, float scale)
+TArray<int> NoiseClass::GenerateNoiseMap(int mapSize, float scale)
 {
 	// make sure it isn't dividing by 0 later
 	if (scale <= 0)
@@ -20,10 +20,11 @@ TArray<int> GenerateNoiseMap(int width, int height, float scale)
 	}
 
 	TArray<int> noiseMap;
+	noiseMap.SetNum(mapSize * mapSize);
 
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < mapSize; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < mapSize; x++)
 		{
 			int vertIndex = 0;
 			float heightSampleX = x / scale;
