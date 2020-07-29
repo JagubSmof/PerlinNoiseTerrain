@@ -13,7 +13,9 @@ public:
 	NoiseClass();
 	~NoiseClass();
 
-	static TArray<int> GenerateNoiseMap(int mapSize, float scale);
+	TArray<float>* noiseMap;
+
+	TArray<float>* GenerateNoiseMap(int mapSize, float scale);
 
 	TArray<FVector> vertices;
 	TArray<int> triangles;

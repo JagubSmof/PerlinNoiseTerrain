@@ -5,13 +5,17 @@
 
 NoiseClass::NoiseClass()
 {
+	noiseMap = new TArray<float>();
 }
 
 NoiseClass::~NoiseClass()
 {
+	if (noiseMap != nullptr) {
+		delete noiseMap;
+	}
 }
 
-TArray<int> NoiseClass::GenerateNoiseMap(int mapSize, float scale)
+TArray<float>* NoiseClass::GenerateNoiseMap(int mapSize, float scale)
 {
 	// make sure it isn't dividing by 0 later
 	if (scale <= 0)
@@ -19,21 +23,23 @@ TArray<int> NoiseClass::GenerateNoiseMap(int mapSize, float scale)
 		scale = 0.0001f;
 	}
 
-	TArray<int> noiseMap;
-	noiseMap.SetNum(mapSize * mapSize);
+	noiseMap->SetNum(mapSize * mapSize);
 
+	int vertIndex = 0;
 	for (int y = 0; y < mapSize; y++)
 	{
 		for (int x = 0; x < mapSize; x++)
 		{
-			int vertIndex = 0;
 			float heightSampleX = x / scale;
 			float heightSampleY = y / scale;
 
-			float perlinValue = FMath::PerlinNoise2D(FVector2D(heightSampleX, heightSampleY));
-			noiseMap[vertIndex] = perlinValue;
+			float perlinValue = FMath::PerlinNoise2D(FVector2D(heightSampleX, heightSampleY)) * 10000.0f;
+
+			//perlinValue *= 10.0f;
+			(*noiseMap)[vertIndex] = perlinValue;
 			vertIndex++;
 		}
 	}
+
 	return noiseMap;
 }

@@ -14,6 +14,7 @@ class PERLINNOISETERRAIN_API ATerrain : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATerrain();
+	~ATerrain();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,10 +25,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void CreateMesh();
-	MeshData* GenerateTerrainMesh(TArray<int> heightMap);
+	class MeshData* GenerateTerrainMesh(TArray<float>* heightMap);
 
 	class UProceduralMeshComponent* mesh;
 	class MeshData* meshData;
+	class NoiseClass* noiseClass;
+
+	TArray<float>* heightMap;
 
 	UPROPERTY(EditAnywhere)
 		// Size of the map. Map will always be square

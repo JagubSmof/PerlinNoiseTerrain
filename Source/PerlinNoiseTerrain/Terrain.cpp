@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Terrain.h"
+#include "Engine.h"
 #include "MeshData.h"
 #include "NoiseClass.h"
 #include "ProceduralMeshComponent.h"
@@ -11,14 +12,18 @@ ATerrain::ATerrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Procedural Mesh"));
-	meshData = new MeshData(mapSize);
+	
+}
+
+ATerrain::~ATerrain() {
 }
 
 // Called when the game starts or when spawned
 void ATerrain::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	meshData = new MeshData(mapSize);
+	noiseClass = new NoiseClass();
 	CreateMesh();
 }
 
@@ -30,17 +35,15 @@ void ATerrain::Tick(float DeltaTime)
 
 void ATerrain::CreateMesh()
 {
-	TArray<int> heightMap = NoiseClass::GenerateNoiseMap(mapSize, mapScale);
-
-	GenerateTerrainMesh(heightMap);
-
+	heightMap = noiseClass->GenerateNoiseMap(mapSize, mapScale);
+	meshData = GenerateTerrainMesh(heightMap);
 	mesh->CreateMeshSection_LinearColor(0, meshData->vertices, meshData->triangles, meshData->normals,
 		meshData->UV0, TArray<FLinearColor>(), TArray<FProcMeshTangent>(), true);
 }
 
-MeshData* ATerrain::GenerateTerrainMesh(TArray<int> heightMap)
+MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
 {
-	int heightMapSize = heightMap.Num();
+	int heightMapSize = noiseMap->Num();
 
 	// for centering the mesh
 	float topLeftX = (heightMapSize - 1) / -2.0f;
@@ -52,8 +55,9 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<int> heightMap)
 	{
 		for (int x = 0; x < mapSize; x++)
 		{
-			meshData->vertices[vertIndex] = FVector(topLeftX + x, heightMap[vertIndex],
+			meshData->vertices[vertIndex] = FVector(topLeftX + x, (*noiseMap)[vertIndex],
 				topLeftZ + y);
+
 			meshData->UV0[vertIndex] = FVector2D(x / float(mapSize), y / float(mapSize));
 
 			if (x < mapSize - 1 && y < mapSize - 1)
@@ -65,5 +69,6 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<int> heightMap)
 			vertIndex++;
 		}
 	}
+
 	return meshData;
 }

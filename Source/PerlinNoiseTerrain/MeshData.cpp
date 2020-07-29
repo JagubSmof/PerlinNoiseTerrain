@@ -8,6 +8,7 @@ MeshData::MeshData(int mapSize)
 	vertices.SetNum(mapSize * mapSize);
 	triangles.SetNum((mapSize - 1) * (mapSize - 1) * 6);
 	UV0.SetNum(mapSize * mapSize);
+	normals.SetNum(mapSize * mapSize);
 }
 
 MeshData::~MeshData()
