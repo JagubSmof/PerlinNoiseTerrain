@@ -18,7 +18,7 @@ public:
 	TArray<FVector> vertices;
 	TArray<int> triangles;
 	TArray<FVector2D> UV0;
-	TArray<FVector> normals;
+	//TArray<FVector> normals;
 
 private:
 	int triangleIndex = 0;
