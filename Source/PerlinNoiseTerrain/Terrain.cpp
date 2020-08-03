@@ -35,7 +35,7 @@ void ATerrain::Tick(float DeltaTime)
 
 void ATerrain::CreateMesh()
 {
-	heightMap = noiseClass->GenerateNoiseMap(mapSize, mapScale);
+	heightMap = noiseClass->GenerateNoiseMap(mapSize, mapScale, octaves, persistance, lacunarity);
 	meshData = GenerateTerrainMesh(heightMap);
 	mesh->CreateMeshSection_LinearColor(0, meshData->vertices, meshData->triangles, TArray<FVector>(),
 		meshData->UV0, TArray<FLinearColor>(), TArray<FProcMeshTangent>(), true);

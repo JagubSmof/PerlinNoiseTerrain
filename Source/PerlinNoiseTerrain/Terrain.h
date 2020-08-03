@@ -33,9 +33,16 @@ public:
 
 	TArray<float>* heightMap;
 
+
 	UPROPERTY(EditAnywhere)
 		// Size of the map. Map will always be square
 		int mapSize;
 	UPROPERTY(EditAnywhere)
 		float mapScale;
+	UPROPERTY(EditAnywhere)
+		int octaves;
+	UPROPERTY(EditAnywhere)
+		float persistance;
+	UPROPERTY(EditAnywhere)
+		float lacunarity;
 };

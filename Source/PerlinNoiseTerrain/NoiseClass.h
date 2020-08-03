@@ -15,7 +15,7 @@ public:
 
 	TArray<float>* noiseMap;
 
-	TArray<float>* GenerateNoiseMap(int mapSize, float scale);
+	TArray<float>* GenerateNoiseMap(int mapSize, float scale, int octaves, float persistance, float lacunarity);
 
 	TArray<FVector> vertices;
 	TArray<int> triangles;
