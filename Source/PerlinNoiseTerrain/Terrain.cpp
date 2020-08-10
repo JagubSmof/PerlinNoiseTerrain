@@ -12,7 +12,7 @@ ATerrain::ATerrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Procedural Mesh"));
-	
+	material = CreateDefaultSubobject<UMaterial>(TEXT("Material"));
 }
 
 ATerrain::~ATerrain() {
@@ -36,9 +36,26 @@ void ATerrain::Tick(float DeltaTime)
 void ATerrain::CreateMesh()
 {
 	heightMap = noiseClass->GenerateNoiseMap(mapSize, mapScale, octaves, persistance, lacunarity);
+
+	for (int i = 0; i < mapSize; i++)
+	{
+		colourMap.SetNum(mapSize * mapSize);
+		float currentHeight = (*heightMap)[i];
+		if (currentHeight <= waterHeight)
+		{
+			colourMap[i] = FLinearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		}
+		else if (currentHeight > waterHeight && currentHeight <= landHeight)
+		{
+			colourMap[i] = FLinearColor(0.0f, 1.0f, 0.0f, 1.0f);
+		}
+	}
+
 	meshData = GenerateTerrainMesh(heightMap);
 	mesh->CreateMeshSection_LinearColor(0, meshData->vertices, meshData->triangles, TArray<FVector>(),
-		meshData->UV0, TArray<FLinearColor>(), TArray<FProcMeshTangent>(), true);
+		meshData->UV0, colourMap, TArray<FProcMeshTangent>(), true);
+
+	mesh->SetMaterial(0, material);
 }
 
 MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
@@ -51,8 +68,7 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
 	{
 		for (int x = 0; x < mapSize; x++)
 		{
-			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex], y);
-
+			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex] * heightMult, y);
 			meshData->UV0[vertIndex] = FVector2D(x / float(mapSize), y / float(mapSize));
 
 			if (x < mapSize - 1 && y < mapSize - 1)

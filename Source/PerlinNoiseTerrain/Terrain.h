@@ -30,13 +30,14 @@ public:
 	class UProceduralMeshComponent* mesh;
 	class MeshData* meshData;
 	class NoiseClass* noiseClass;
+	class UMaterial* material;
 
 	TArray<float>* heightMap;
+	TArray<FLinearColor> colourMap;
 
-
-	UPROPERTY(EditAnywhere)
-		// Size of the map. Map will always be square
-		int mapSize;
+	// Size of the map. Map will always be square
+	const int mapSize = 241;
+	
 	UPROPERTY(EditAnywhere)
 		float mapScale;
 	UPROPERTY(EditAnywhere)
@@ -45,4 +46,12 @@ public:
 		float persistance;
 	UPROPERTY(EditAnywhere)
 		float lacunarity;
+	UPROPERTY(EditAnywhere)
+		float heightMult;
+
+	/* Colour Regions */
+	UPROPERTY(EditAnywhere)
+		float waterHeight;
+	UPROPERTY(EditAnywhere)
+		float landHeight = 1;
 };

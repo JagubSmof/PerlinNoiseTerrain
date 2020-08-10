@@ -28,8 +28,8 @@ TArray<float>* NoiseClass::GenerateNoiseMap(int mapSize, float scale, int octave
 
 	float maxNoiseHeight = 0;
 	float minNoiseHeight = 0;
-
 	int vertIndex = 0;
+
 	for (int y = 0; y < mapSize; y++)
 	{
 		for (int x = 0; x < mapSize; x++)
@@ -37,6 +37,7 @@ TArray<float>* NoiseClass::GenerateNoiseMap(int mapSize, float scale, int octave
 			float amplitude = 1.0f;
 			float frequency = 1.0f;
 			float noiseHeight = 0.0f;
+			
 			for (int i = 0; i < octaves; i++)
 			{
 				float heightSampleX = x / scale * frequency;
@@ -44,23 +45,23 @@ TArray<float>* NoiseClass::GenerateNoiseMap(int mapSize, float scale, int octave
 
 				float perlinValue = FMath::PerlinNoise2D(FVector2D(heightSampleX, heightSampleY)) * 2 - 1;
 
-				noiseHeight += perlinValue * scale * amplitude;
+				noiseHeight += perlinValue * amplitude;
 				amplitude *= persistance;
 				frequency *= lacunarity;
-
-				if (maxNoiseHeight < noiseHeight)
-				{
-					maxNoiseHeight = noiseHeight;
-				}
-				else if (minNoiseHeight > noiseHeight)
-				{
-					minNoiseHeight = noiseHeight;
-				}
-
-				//perlinValue *= 10.0f;
-				(*noiseMap)[vertIndex] = noiseHeight;
-				vertIndex++;
 			}
+
+			if (maxNoiseHeight < noiseHeight)
+			{
+				maxNoiseHeight = noiseHeight;
+			}
+			else if (minNoiseHeight > noiseHeight)
+			{
+				minNoiseHeight = noiseHeight;
+			}
+
+			//perlinValue *= 10.0f;
+			(*noiseMap)[vertIndex] = noiseHeight;
+			vertIndex++;
 		}
 	}
 
