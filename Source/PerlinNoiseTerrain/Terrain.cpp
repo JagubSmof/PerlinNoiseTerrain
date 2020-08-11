@@ -41,14 +41,6 @@ void ATerrain::CreateMesh()
 	{
 		colourMap.SetNum(mapSize * mapSize);
 		float currentHeight = (*heightMap)[i];
-		if (currentHeight <= waterHeight)
-		{
-			colourMap[i] = FLinearColor(0.0f, 0.0f, 1.0f, 1.0f);
-		}
-		else if (currentHeight > waterHeight && currentHeight <= landHeight)
-		{
-			colourMap[i] = FLinearColor(0.0f, 1.0f, 0.0f, 1.0f);
-		}
 	}
 
 	meshData = GenerateTerrainMesh(heightMap);
@@ -69,7 +61,7 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
 		for (int x = 0; x < mapSize; x++)
 		{
 			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex] * heightMult, y);
-			meshData->UV0[vertIndex] = FVector2D(x / float(mapSize), y / float(mapSize));
+			meshData->UV0[vertIndex] = FVector2D((x / float(mapSize)) * 10, (y / float(mapSize)) * 10);
 
 			if (x < mapSize - 1 && y < mapSize - 1)
 			{
