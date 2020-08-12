@@ -12,7 +12,6 @@ ATerrain::ATerrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Procedural Mesh"));
-	material = CreateDefaultSubobject<UMaterial>(TEXT("Material"));
 }
 
 ATerrain::~ATerrain() {
@@ -46,8 +45,7 @@ void ATerrain::CreateMesh()
 	meshData = GenerateTerrainMesh(heightMap);
 	mesh->CreateMeshSection_LinearColor(0, meshData->vertices, meshData->triangles, TArray<FVector>(),
 		meshData->UV0, colourMap, TArray<FProcMeshTangent>(), true);
-
-	mesh->SetMaterial(0, material);
+	mesh->SetMaterial(0, groundMaterial);
 }
 
 MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
@@ -60,8 +58,18 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
 	{
 		for (int x = 0; x < mapSize; x++)
 		{
-			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex] * heightMult, y);
+			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex] * heightMult + 15, y);
 			meshData->UV0[vertIndex] = FVector2D((x / float(mapSize)) * 10, (y / float(mapSize)) * 10);
+
+			if ((*noiseMap)[vertIndex] <= waterHeight)
+			{
+				// flatten all water
+				meshData->vertices[vertIndex] = FVector(x, 0.0f, y);
+				colourMap[vertIndex] = FLinearColor(FColor::Blue);
+			}
+			else {
+				colourMap[vertIndex] = FLinearColor(FColor::Green);
+			}
 
 			if (x < mapSize - 1 && y < mapSize - 1)
 			{
