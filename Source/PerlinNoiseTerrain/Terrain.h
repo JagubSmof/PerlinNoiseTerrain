@@ -30,7 +30,6 @@ public:
 	class UProceduralMeshComponent* mesh;
 	class MeshData* meshData;
 	class NoiseClass* noiseClass;
-	class UMaterial* material;
 
 	TArray<float>* heightMap;
 	TArray<FLinearColor> colourMap;
@@ -54,4 +53,8 @@ public:
 		float waterHeight;
 	UPROPERTY(EditAnywhere)
 		float landHeight = 1;
+
+	/* Material */
+	UPROPERTY(EditAnywhere)
+		class UMaterial* groundMaterial;
 };
