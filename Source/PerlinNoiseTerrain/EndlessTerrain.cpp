@@ -74,29 +74,36 @@ TerrainChunk::TerrainChunk(FVector2D coord, int size)
 	chunkPos = coord * size;
 	FVector posV3 = FVector(chunkPos.X, 0, chunkPos.Y);
 
-	AMeshActor->SetActorLocation(posV3);
-	AMeshActor->SetActorRelativeScale3D(FVector(1, 1, 1) * size);
+	endlessTerrain->AMeshActor->SetActorLocation(posV3);
+	endlessTerrain->AMeshActor->SetActorRelativeScale3D(FVector(1, 1, 1) * size);
 	SetVisible(false);
 }
 
 TerrainChunk::~TerrainChunk()
 {
+	if (endlessTerrain != nullptr)
+	{
+		delete endlessTerrain;
+	}
 }
 
 void TerrainChunk::UpdateTerrainChunk()
 {
 	// calc distance of vectors
-	FVector2D::Distance(chunkPos, endlessTerrain->viewerPos);
-	//float viewerDistFromNearestEdge = FMath::Sqrt(bounds.sqrDistance(viewerpos));
-	//bool isChunkVisible = (viewerDistFromNearestEdge <= AEndlessTerrain::maxViewDist);
-	//SetVisible(isChunkVisible);
+	float sqrDist = FVector2D::Distance(chunkPos, endlessTerrain->viewerPos) * FVector2D::Distance(chunkPos, endlessTerrain->viewerPos);
+	float viewerDistFromNearestEdge = FMath::Sqrt(sqrDist);
+	bool isChunkVisible = (viewerDistFromNearestEdge <= endlessTerrain->maxViewDist);
+	SetVisible(isChunkVisible);
 }
 
 void TerrainChunk::SetVisible(bool isChunkVisible)
 {
+	// if actor is visible, it shouldn't be hidden
+	endlessTerrain->AMeshActor->SetActorHiddenInGame(!isChunkVisible);
 }
 
 bool TerrainChunk::IsVisible()
 {
-	return false;
+	// if actor is hidden, it shouldn't be visible
+	return !endlessTerrain->AMeshActor->IsHidden();
 }

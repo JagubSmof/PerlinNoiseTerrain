@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		class AActor* viewer;
 
+	UPROPERTY(EditAnywhere)
+		class AActor* AMeshActor;
+
 	FVector2D viewerPos;
 
 	TMap<FVector2D, class TerrainChunk*> dictTerrainChunk;
@@ -48,7 +51,6 @@ public:
 class PERLINNOISETERRAIN_API TerrainChunk
 {
 public:
-	AActor* AMeshActor;
 	FVector2D chunkPos;
 	AEndlessTerrain* endlessTerrain;
 
