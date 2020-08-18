@@ -62,20 +62,19 @@ MeshData* ATerrain::GenerateTerrainMesh(TArray<float>* noiseMap)
 	{
 		for (int x = 0; x < mapSize; x++)
 		{
-			meshData->vertices[vertIndex] = FVector(topLeftX + x, (*noiseMap)[vertIndex] * heightMult + 15, topLeftZ + y);
+			meshData->vertices[vertIndex] = FVector(x, (*noiseMap)[vertIndex] * heightMult + 15, y);
 			meshData->UV0[vertIndex] = FVector2D((x / float(mapSize)) * 20, (y / float(mapSize)) * 20);
 
-			/*
 			if ((*noiseMap)[vertIndex] <= waterHeight)
 			{
 				// flatten all water
-				meshData->vertices[vertIndex] = FVector(x, 0.0f, y);
+				meshData->vertices[vertIndex] = FVector(x, -2.5f, y);
 				colourMap[vertIndex] = FLinearColor(0.0f, 0.0f, 0.5f);
 			}
 			else {
 				colourMap[vertIndex] = FLinearColor(0.0f, 0.5f, 0.0f);
 			}
-			*/
+
 
 			if (x < mapSize - 1 && y < mapSize - 1)
 			{
