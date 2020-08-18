@@ -47,6 +47,8 @@ public:
 		float lacunarity;
 	UPROPERTY(EditAnywhere)
 		float heightMult;
+	UPROPERTY(BlueprintReadWrite)
+		float vertexHeight;
 
 	/* Colour Regions */
 	UPROPERTY(EditAnywhere)
